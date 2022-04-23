@@ -2,7 +2,8 @@ import * as React from "react";
 import algosdk from "algosdk";
 import { Box, Grid } from "@mui/material";
 import OptedInAppList from "./lists/OptedInAppList";
-import AssetList from "./lists/AssetList";
+import OptedInAssetList from "./lists/OptedInAssetList";
+import CreatedAssetList from "./lists/CreatedAssetList";
 import CreatedAppList from "./lists/CreatedAppList";
 import { AccountContext } from "../contexts/AccountContext";
 import Typography from "@mui/material/Typography";
@@ -48,11 +49,14 @@ export default function Details(props) {
               />
             </Grid>
             <Grid item xs={5} md={3}>
-              <AssetList assetKey="created-assets" title="Created assets" />
+              <CreatedAssetList
+                title="Created assets"
+                interactive={true}
+                onShowMessage={props.onShowMessage}
+              />
             </Grid>
             <Grid item xs={5} md={3}>
-              <AssetList
-                assetKey="assets"
+              <OptedInAssetList
                 title="Opted-in assets"
                 interactive={true}
                 onShowMessage={props.onShowMessage}
