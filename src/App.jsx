@@ -3,7 +3,7 @@ import logo from "./algorand_logo.svg";
 import "./App.css";
 import AccountForm from "./components/AccountForm";
 import AccountDetails from "./components/AccountDetails";
-import { Container, Box } from "@mui/material";
+import { Container, Box, Typography } from "@mui/material";
 import { WalletContextProvider } from "./contexts/WalletContext";
 import { IndexerContextProvider } from "./contexts/IndexerContext";
 import { AccountContextProvider } from "./contexts/AccountContext";
@@ -52,6 +52,9 @@ function App() {
                     <AccountDetails
                       onShowMessage={showMessage}
                     ></AccountDetails>
+                  </Box>
+                  <Box className="box-version">
+                    <Typography variant="version">{`v${process.env.REACT_APP_VERSION}`}</Typography>
                   </Box>
                 </Container>
               </Theme>

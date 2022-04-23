@@ -3,7 +3,7 @@ import Delegate from "../delegates/Delegate";
 import COSTS from "../../utils/costs";
 import algosdk from "algosdk";
 import ResourceList from "./ResourceList";
-import AssetInfoPopup from "../popups/AssetInfoPopup";
+import CreatedAssetInfoPopup from "../popups/CreatedAssetInfoPopup";
 import { AccountContext } from "../../contexts/AccountContext";
 
 export default function AssetList(props) {
@@ -11,15 +11,25 @@ export default function AssetList(props) {
 
   const populateAssetList = (openDialogHandler) => {
     let assets = [];
-    if (account.details[props.assetKey]) {
+    if (account.details["created-assets"]) {
       for (
         let index = 0;
-        index < account.details[props.assetKey].length;
+        index < account.details["created-assets"].length;
         index++
       ) {
-        const asset = account.details[props.assetKey][index];
+        const created = account.details["created-assets"][index];
+        let asset = null;
+        if (account.details["assets"]) {
+            for (let assetIndex = 0; assetIndex < account.details["assets"].length; assetIndex++) {
+                const ownedAsset = account.details["assets"][index];
+                if (ownedAsset["asset-id"] === created["index"]) {
+                    asset = ownedAsset;
+                    break;
+                }
+            }
+        }
         const cost = algosdk.microalgosToAlgos(COSTS.OPT_IN);
-        const resource = { asset, cost };
+        const resource = { asset, cost, created };
         assets.push(
           <Delegate
             key={asset["asset-id"]}
@@ -38,7 +48,7 @@ export default function AssetList(props) {
     <ResourceList
       {...props}
       populate={populateAssetList}
-      popup={AssetInfoPopup}
+      popup={CreatedAssetInfoPopup}
     />
   );
 }

@@ -42,6 +42,17 @@ const AccountContextProvider = ({ children }) => {
     });
   };
 
+  const destroyAsset = async (assetId) => {
+    const suggestedParams = await algod.client.getTransactionParams().do();
+    const unsignedTxn =
+      algosdk.makeAssetDestroyTxnWithSuggestedParamsFromObject({
+        assetIndex: assetId,
+        from: address,
+        suggestedParams: suggestedParams,
+      });
+    return unsignedTxn;
+  };
+
   const optOutAsset = async (assetId) => {
     const suggestedParams = await algod.client.getTransactionParams().do();
     const unsignedTxn =
@@ -130,6 +141,7 @@ const AccountContextProvider = ({ children }) => {
     fetchAccount,
     optOutAsset,
     optOutApp,
+    destroyAsset,
   };
 
   return (
