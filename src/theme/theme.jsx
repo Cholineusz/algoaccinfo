@@ -29,6 +29,11 @@ const theme = createTheme({
       fontWeight: 600,
       color: "#E94B3C",
     },
+    version: {
+      fontSize: 16,
+      fontWeight: 600,
+      color: "black"
+    }
   },
 });
 
