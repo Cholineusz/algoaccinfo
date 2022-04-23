@@ -1,5 +1,5 @@
-# Algorand Account Info
-The main purpose of this project is to help algorand users to manage their account. To be more detailed, an user can opt out from abadoned or not used anymore smart contracts, assets and reduce the amount of reserved algos.
+# Algorand Account Informations
+The main purpose of this project is to help Algorand users to manage their account. An user can opt out from abadoned or not used anymore smart contracts, assets and reduce the amount of reserved algos.
 
 # Run project
 1. Download Node.js (v16.14.*)
