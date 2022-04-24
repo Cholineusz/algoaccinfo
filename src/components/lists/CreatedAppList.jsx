@@ -3,12 +3,13 @@ import Delegate from "../delegates/Delegate";
 import ResourceList from "./ResourceList";
 import algosdk from "algosdk";
 import COSTS from "../../utils/costs";
+import CreatedAppInfoPopup from "../popups/CreatedAppInfoPopup";
 import { AccountContext } from "../../contexts/AccountContext";
 
 export default function CreatedAppList(props) {
   const account = React.useContext(AccountContext);
 
-  const populateAppList = () => {
+  const populateAppList = (openDialogHandler) => {
     let apps = [];
     if (account.details["created-apps"]) {
       for (
@@ -32,15 +33,25 @@ export default function CreatedAppList(props) {
             byteSlices
           )
         );
-        apps.push(<Delegate key={app.id} primary={app.id} secondary={cost} />);
+        const resource = {app, cost}
+        apps.push(
+          <Delegate
+            key={app.id}
+            primary={app.id}
+            secondary={cost}
+            interactive={props.interactive}
+            handleClick={() => openDialogHandler(resource)}
+          />
+        );
       }
       return apps;
     }
   };
   return (
     <ResourceList
-      title="Created apps"
+      {...props}
       populate={populateAppList}
+      popup={CreatedAppInfoPopup}
     ></ResourceList>
   );
 }

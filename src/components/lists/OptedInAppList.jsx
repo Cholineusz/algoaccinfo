@@ -3,7 +3,7 @@ import Delegate from "../delegates/Delegate";
 import ResourceList from "./ResourceList";
 import COSTS from "../../utils/costs";
 import algosdk from "algosdk";
-import AppInfoPopup from "../popups/AppInfoPopup";
+import OptedInAppInfoPopup from "../popups/OptedInAppInfoPopup";
 import { AccountContext } from "../../contexts/AccountContext";
 
 export default function OptedInAppList(props) {
@@ -41,9 +41,8 @@ export default function OptedInAppList(props) {
   return (
     <ResourceList
       {...props}
-      title="Opted-in apps"
       populate={populateAppList}
-      popup={AppInfoPopup}
+      popup={OptedInAppInfoPopup}
     />
   );
 }
