@@ -102,7 +102,7 @@ const AccountContextProvider = ({ children }) => {
 
         let appsUintCost = 0;
         let appsByteSliceCost = 0;
-        if (optedInAppsCost > 0 || appsCreatedCost > 0) {
+        if (details["apps-total-schema"] && (optedInAppsCost > 0 || appsCreatedCost > 0)) {
           appsUintCost = details["apps-total-schema"]["num-uint"] * COSTS.UINT;
           appsByteSliceCost =
             details["apps-total-schema"]["num-byte-slice"] * COSTS.BYTE_SLICE;
