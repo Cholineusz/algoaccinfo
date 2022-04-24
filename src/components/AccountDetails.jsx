@@ -40,10 +40,15 @@ export default function Details(props) {
           </Typography>
           <Grid container spacing={1} sx={{ justifyContent: "center" }}>
             <Grid item xs={5} md={3}>
-              <CreatedAppList />
+              <CreatedAppList
+                title="Created apps"
+                interactive={true}
+                onShowMessage={props.onShowMessage}
+              />
             </Grid>
             <Grid item xs={5} md={3}>
               <OptedInAppList
+                title="Opted-in apps"
                 interactive={true}
                 onShowMessage={props.onShowMessage}
               />

@@ -42,6 +42,16 @@ const AccountContextProvider = ({ children }) => {
     });
   };
 
+  const destroyApp = async (appId) => {
+    const suggestedParams = await algod.client.getTransactionParams().do();
+    const unsignedTxn = algosdk.makeApplicationDeleteTxnFromObject({
+      appIndex: appId,
+      from: address,
+      suggestedParams: suggestedParams,
+    });
+    return unsignedTxn;
+  };
+
   const destroyAsset = async (assetId) => {
     const suggestedParams = await algod.client.getTransactionParams().do();
     const unsignedTxn =
@@ -102,7 +112,7 @@ const AccountContextProvider = ({ children }) => {
 
         let appsUintCost = 0;
         let appsByteSliceCost = 0;
-        if (optedInAppsCost > 0 || appsCreatedCost > 0) {
+        if (details["apps-total-schema"] && (optedInAppsCost > 0 || appsCreatedCost > 0)) {
           appsUintCost = details["apps-total-schema"]["num-uint"] * COSTS.UINT;
           appsByteSliceCost =
             details["apps-total-schema"]["num-byte-slice"] * COSTS.BYTE_SLICE;
@@ -142,6 +152,7 @@ const AccountContextProvider = ({ children }) => {
     optOutAsset,
     optOutApp,
     destroyAsset,
+    destroyApp,
   };
 
   return (
