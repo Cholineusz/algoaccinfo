@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import { CircularProgress } from "@mui/material";
 import ResourceInfoPopup from "./ResourceInfoPopup";
 import { AccountContext } from "../../contexts/AccountContext";
@@ -13,8 +14,12 @@ export default function AppInfoPopup(props) {
   const algod = React.useContext(AlgodContext);
 
   const [message, setMessage] = React.useState("");
-  const [lastUse, setLastUse] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
+  const [details, setDetails] = React.useState({
+    name: "",
+    description: "",
+    lastUse: null,
+  });
 
   const showMessage = (text) => {
     clearMessage();
@@ -72,13 +77,31 @@ export default function AppInfoPopup(props) {
         const date = new Date(
           txns["transactions"][0]["round-time"] * 1000
         ).toLocaleString();
-        setLastUse(date);
-        return;
+        return date;
       }
-      setLastUse("Never used");
+      return "Never used";
     };
 
-    getLastUse();
+    const getDetails = async () => {
+      const appInfo = await axios.get(
+        `${process.env.REACT_APP_ALGO_RES_INFO_HOST}/applications/?id=${props.app.id}`
+      );
+
+      if (appInfo.data && appInfo.data.length > 0) {
+        const data = appInfo.data[0];
+        return { name: data.name, description: data.description };
+      }
+      return { name: "", description: "" };
+    };
+
+    const fetchData = async () => {
+      const lastUse = await getLastUse();
+      const { name, description } = await getDetails();
+
+      setDetails({ name, description, lastUse });
+    };
+
+    fetchData();
   }, []);
 
   const content = () => {
@@ -91,9 +114,29 @@ export default function AppInfoPopup(props) {
           <b>reserved:</b> {`${props.cost} Algos`}
         </div>
         <div>
+          <b>owner:</b>{" "}
+          {details.name ? (
+            details.name
+          ) : details.lastUse ? (
+            "Not found"
+          ) : (
+            <CircularProgress size={12} sx={{ color: "black" }} />
+          )}
+        </div>
+        <div>
+          <b>name:</b>{" "}
+          {details.description ? (
+            details.description
+          ) : details.lastUse ? (
+            "Not found"
+          ) : (
+            <CircularProgress size={12} sx={{ color: "black" }} />
+          )}
+        </div>
+        <div>
           <b>last use:</b>{" "}
-          {lastUse ? (
-            lastUse
+          {details.lastUse ? (
+            details.lastUse
           ) : (
             <CircularProgress
               size={12}

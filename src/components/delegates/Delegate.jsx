@@ -16,8 +16,8 @@ export default function Delegate(props) {
         onClick={props.handleClick}
       >
         <ListItemText
-          primary={`id: ${props.primary}`}
-          secondary={`reserved: ${props.secondary} Algos`}
+          primary={props.primary}
+          secondary={props.secondary}
         />
       </ListItemButton>
     </ListItem>

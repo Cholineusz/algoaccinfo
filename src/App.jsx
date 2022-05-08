@@ -55,6 +55,14 @@ function App() {
                   </Box>
                   <Box className="box-version">
                     <Typography variant="version">{`v${process.env.REACT_APP_VERSION}`}</Typography>
+                    <Typography variant="version">
+                      <a
+                        href="https://github.com/HashingSlash/AlgoRolo"
+                        target="_blank"
+                      >
+                        Apps info provided by AlgoRolo
+                      </a>
+                    </Typography>
                   </Box>
                 </Container>
               </Theme>

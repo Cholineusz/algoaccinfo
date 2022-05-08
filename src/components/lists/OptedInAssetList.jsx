@@ -1,5 +1,5 @@
 import * as React from "react";
-import Delegate from "../delegates/Delegate";
+import AssetDelegate from "../delegates/AssetDelegate";
 import COSTS from "../../utils/costs";
 import algosdk from "algosdk";
 import ResourceList from "./ResourceList";
@@ -21,10 +21,11 @@ export default function AssetList(props) {
         const cost = algosdk.microalgosToAlgos(COSTS.OPT_IN);
         const resource = { asset, cost };
         assets.push(
-          <Delegate
+          <AssetDelegate
             key={asset["asset-id"]}
-            primary={asset["asset-id"]}
-            secondary={cost}
+            primary={`id: ${asset["asset-id"]}`}
+            secondary={`reserved: ${cost} Algos`}
+            asset={asset}
             interactive={props.interactive}
             handleClick={() => openDialogHandler(resource)}
           />
