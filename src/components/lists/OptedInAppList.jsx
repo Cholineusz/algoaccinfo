@@ -1,5 +1,5 @@
 import * as React from "react";
-import Delegate from "../delegates/Delegate";
+import AppDelegate from "../delegates/AppDelegate";
 import ResourceList from "./ResourceList";
 import COSTS from "../../utils/costs";
 import algosdk from "algosdk";
@@ -26,10 +26,11 @@ export default function OptedInAppList(props) {
         );
         const resource = { app, cost };
         apps.push(
-          <Delegate
+          <AppDelegate
             key={app.id}
-            primary={app.id}
-            secondary={cost}
+            primary={`id: ${app.id}`}
+            secondary={`reserved: ${cost} Algos`}
+            app={app}
             interactive={props.interactive}
             handleClick={() => openDialogHandler(resource)}
           />
