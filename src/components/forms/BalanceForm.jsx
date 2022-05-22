@@ -13,7 +13,7 @@ export default function BalanceForm(props) {
         marginBottom: 2,
       }}
     >
-      <Typography variant="balance" sx={{ marginTop: 3 }}>
+      <Typography variant="balance" sx={{ marginTop: 2 }}>
         {`${props.balanceTitle}: ${algosdk.microalgosToAlgos(
           props.balance
         )} Algos`}
