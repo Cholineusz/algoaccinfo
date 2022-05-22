@@ -17,15 +17,10 @@ const WalletContextProvider = ({ children }) => {
   const prevAddress = usePrevious(account.address);
 
   const connect = async (usePrevSession = false) => {
-    let connection
-    try {
-      connection = new WalletConnect({
-        bridge: "https://bridge.walletconnect.org",
-        qrcodeModal: QRCodeModal,
-      });
-    } catch {
-      console.log("HERE");
-    }
+    const connection = new WalletConnect({
+      bridge: "https://bridge.walletconnect.org",
+      qrcodeModal: QRCodeModal,
+    });
     
     if (!connection.connected && !usePrevSession) {
       connection.createSession();

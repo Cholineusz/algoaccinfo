@@ -59,6 +59,7 @@ function App() {
                       <a
                         href="https://github.com/HashingSlash/AlgoRolo"
                         target="_blank"
+                        rel="noreferrer"
                       >
                         Apps info provided by AlgoRolo
                       </a>
