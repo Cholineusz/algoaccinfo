@@ -38,6 +38,11 @@ export default function AssetInfoPopup(props) {
     const unsignedTxns = await account.destroyAsset(props.asset["asset-id"]);
 
     const signedTxns = await wallet.signTransactions(unsignedTxns);
+    if (!signedTxns) {
+      setLoading(false);
+      showMessage("Transaction rejected, please try again");
+      return;
+    }
 
     algod
       .sendTransaction(signedTxns)

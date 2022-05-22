@@ -17,10 +17,15 @@ const WalletContextProvider = ({ children }) => {
   const prevAddress = usePrevious(account.address);
 
   const connect = async (usePrevSession = false) => {
-    const connection = new WalletConnect({
-      bridge: "https://bridge.walletconnect.org",
-      qrcodeModal: QRCodeModal,
-    });
+    let connection
+    try {
+      connection = new WalletConnect({
+        bridge: "https://bridge.walletconnect.org",
+        qrcodeModal: QRCodeModal,
+      });
+    } catch {
+      console.log("HERE");
+    }
     
     if (!connection.connected && !usePrevSession) {
       connection.createSession();
@@ -101,11 +106,16 @@ const WalletContextProvider = ({ children }) => {
     }
 
     const request = formatJsonRpcRequest("algo_signTxn", [transactionsToSign]);
-    const result = await connector.sendCustomRequest(request);
-    const decodedResult = result.map((element) => {
-      return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
-    });
-    return decodedResult;
+    try {
+      const result = await connector.sendCustomRequest(request);
+      const decodedResult = result.map((element) => {
+        return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
+      });
+      return decodedResult;
+    } catch (error) {
+      console.log("ERROR", error);
+      return null;
+    }
   };
 
   const context = {

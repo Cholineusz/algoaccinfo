@@ -6,7 +6,7 @@ export default function ErrorAlert(props) {
     if (props.timed) {
       setTimeout(() => {
         props.onClearMessage();
-      }, 4000);
+      }, 5000);
     }
   }, [props.message]);
 

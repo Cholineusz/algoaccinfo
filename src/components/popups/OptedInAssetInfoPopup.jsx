@@ -50,6 +50,11 @@ export default function AssetInfoPopup(props) {
     );
 
     const signedTxns = await wallet.signTransactions(unsignedTxns);
+    if (!signedTxns) {
+      setLoading(false);
+      showMessage("Transaction rejected, please try again");
+      return;
+    }
 
     algod
       .sendTransaction(signedTxns)
