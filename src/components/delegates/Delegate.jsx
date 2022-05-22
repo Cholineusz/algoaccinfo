@@ -1,24 +1,42 @@
 import * as React from "react";
-import { ListItem, ListItemButton, ListItemText } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  IconButton,
+} from "@mui/material";
 
 export default function Delegate(props) {
   return (
-    <ListItem>
+    <ListItem
+      sx={{
+        backgroundColor: "black",
+        color: "white",
+        borderRadius: 1,
+        cursor: props.interactive ? "pointer" : "not-allowed",
+        margin: 1,
+        padding: 0,
+      }}
+      secondaryAction={
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          color="error"
+          onClick={props.handleClick}
+        >
+          <DeleteIcon />
+        </IconButton>
+      }
+    >
       <ListItemButton
         sx={{
-          backgroundColor: "black",
-          color: "white",
-          borderRadius: 1,
-          cursor: props.interactive ? "pointer" : "not-allowed",
           "& p": { color: "white" },
           "&:hover": { backgroundColor: "gray" },
         }}
         onClick={props.handleClick}
       >
-        <ListItemText
-          primary={props.primary}
-          secondary={props.secondary}
-        />
+        <ListItemText primary={props.primary} secondary={props.secondary} />
       </ListItemButton>
     </ListItem>
   );

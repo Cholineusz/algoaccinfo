@@ -51,7 +51,7 @@ export default function ResourceInfoPopup(props) {
                 variant="contained"
                 color="success"
               >
-                Connect
+                {`Connect to ${props.actionLabel}`}
               </Button>
             )}
             {wallet.connected && (
