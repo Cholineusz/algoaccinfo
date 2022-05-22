@@ -27,12 +27,12 @@ export default function AppInfoPopup(props) {
 
   const destroy = async () => {
     setLoading(true);
-    const unsignedTxn = await account.destroyApp(props.app.id);
+    const unsignedTxns = await account.destroyApp(props.app.id);
 
-    const signedTxn = await wallet.signTransaction(unsignedTxn);
+    const signedTxns = await wallet.signTransactions(unsignedTxns);
 
     algod
-      .sendTransaction(signedTxn)
+      .sendTransaction(signedTxns)
       .then(async () => {
         account.fetchAccount().then(() => {
           props.onShowMessage(

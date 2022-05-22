@@ -79,16 +79,28 @@ const WalletContextProvider = ({ children }) => {
     }
   };
 
-  const signTransaction = async (transaction, message = "") => {
-    const enc = algosdk.encodeUnsignedTransaction(transaction);
-    const encodedTransaction = Buffer.from(enc).toString("base64");
+  const signTransactions = async (transactions, messages = []) => {
+    let transactionsToSign = [];
+    for (let index = 0; index < transactions.length; index++) {
+      const transaction = transactions[index];
+      
+      const enc = algosdk.encodeUnsignedTransaction(transaction);
+      const encodedTransaction = Buffer.from(enc).toString("base64");
 
-    const transactionToSign = {
-      txn: encodedTransaction,
-      message: message,
-    };
+      let message = "";
+      if (messages.length > index) {
+        message = messages[index];
+      }
 
-    const request = formatJsonRpcRequest("algo_signTxn", [[transactionToSign]]);
+      transactionsToSign.push(
+        {
+          txn: encodedTransaction,
+          message: message,
+        }
+      );
+    }
+
+    const request = formatJsonRpcRequest("algo_signTxn", [transactionsToSign]);
     const result = await connector.sendCustomRequest(request);
     const decodedResult = result.map((element) => {
       return element ? new Uint8Array(Buffer.from(element, "base64")) : null;
@@ -101,7 +113,7 @@ const WalletContextProvider = ({ children }) => {
     connected,
     connect,
     disconnect,
-    signTransaction,
+    signTransactions,
   };
 
   React.useEffect(() => {

@@ -49,7 +49,7 @@ const AccountContextProvider = ({ children }) => {
       from: address,
       suggestedParams: suggestedParams,
     });
-    return unsignedTxn;
+    return [unsignedTxn];
   };
 
   const destroyAsset = async (assetId) => {
@@ -60,12 +60,27 @@ const AccountContextProvider = ({ children }) => {
         from: address,
         suggestedParams: suggestedParams,
       });
-    return unsignedTxn;
+    return [unsignedTxn];
   };
 
-  const optOutAsset = async (assetId) => {
+  const optOutAsset = async (assetId, creatorAddress="", amount=0) => {
     const suggestedParams = await algod.client.getTransactionParams().do();
-    const unsignedTxn =
+    
+    let transactions = [];
+    //Send remaining amount to creator address:
+    if (amount > 0 && creatorAddress) {
+      transactions.push(
+        algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
+          assetIndex: assetId,
+          from: address,
+          to: creatorAddress,
+          amount: amount,
+          suggestedParams: suggestedParams,
+        })
+      )
+    }
+    //Opt-out:
+    transactions.push(
       algosdk.makeAssetTransferTxnWithSuggestedParamsFromObject({
         assetIndex: assetId,
         from: address,
@@ -73,8 +88,13 @@ const AccountContextProvider = ({ children }) => {
         amount: 0,
         suggestedParams: suggestedParams,
         closeRemainderTo: address,
-      });
-    return unsignedTxn;
+      })
+    );
+    //Atomic transfer:
+    if (transactions.length > 1) {
+      transactions = algosdk.assignGroupID(transactions);
+    }
+    return transactions;
   };
 
   const optOutApp = async (appId) => {
@@ -84,7 +104,7 @@ const AccountContextProvider = ({ children }) => {
       from: address,
       suggestedParams: suggestedParams,
     });
-    return unsignedTxn;
+    return [unsignedTxn];
   };
 
   React.useEffect(() => {
