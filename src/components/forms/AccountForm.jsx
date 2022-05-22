@@ -15,11 +15,11 @@ import {
 } from "@mui/material";
 import "./AccountForm.css";
 import algosdk from "algosdk";
-import { AccountContext } from "../contexts/AccountContext";
-import { WalletContext } from "../contexts/WalletContext";
-import { NetworkContext } from "../contexts/NetworkContext";
-import { IndexerContext } from "../contexts/IndexerContext";
-import usePrevious from "../utils/utils";
+import { AccountContext } from "../../contexts/AccountContext";
+import { WalletContext } from "../../contexts/WalletContext";
+import { NetworkContext } from "../../contexts/NetworkContext";
+import { IndexerContext } from "../../contexts/IndexerContext";
+import usePrevious from "../../utils/utils";
 
 export default function Form(props) {
   const indexer = React.useContext(IndexerContext);

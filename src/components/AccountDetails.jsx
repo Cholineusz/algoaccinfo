@@ -1,15 +1,43 @@
 import * as React from "react";
-import algosdk from "algosdk";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Stack, Divider } from "@mui/material";
 import OptedInAppList from "./lists/OptedInAppList";
 import OptedInAssetList from "./lists/OptedInAssetList";
 import CreatedAssetList from "./lists/CreatedAssetList";
 import CreatedAppList from "./lists/CreatedAppList";
 import { AccountContext } from "../contexts/AccountContext";
-import Typography from "@mui/material/Typography";
+import BalanceForm from "./forms/BalanceForm";
 
 export default function Details(props) {
   const account = React.useContext(AccountContext);
+
+  const balanceForm = () => {
+    let available = 0;
+    if (account.details.amount > account.reservedAlgos > 0) {
+      available = account.details.amount - account.reservedAlgos;
+    }
+    return <BalanceForm
+      title={ account.details.governance_ ? "(without governance)" : "" }
+      balanceTitle="Balance"
+      balance={account.details.amount}
+      available={available}
+      reserved={account.reservedAlgos}
+    />
+  }
+
+  const governanceForm = () => {
+    const govCommitment = account.details.governance_.committed_algo_amount;
+    let available = 0;
+    if (account.details.amount > account.reservedAlgos > 0) {
+      available = account.details.amount - account.reservedAlgos - govCommitment;
+    }
+    return <BalanceForm
+      title={ account.details.governance_ ? "(with governance)" : "" }
+      balanceTitle={account.details.governance_.period.title}
+      balance={govCommitment}
+      available={available}
+      reserved={account.reservedAlgos + govCommitment}
+    />
+  }
 
   return (
     <>
@@ -21,23 +49,11 @@ export default function Details(props) {
             flexDirection: "column",
           }}
         >
-          <Typography variant="balance" sx={{ marginTop: 3 }}>
-            Balance:{" "}
-            {`${algosdk.microalgosToAlgos(account.details.amount)} Algos`}
-          </Typography>
-          <Typography variant="available" sx={{ marginTop: 3 }}>
-            Available:{" "}
-            {`${
-              account.details.amount > account.reservedAlgos > 0 &&
-              algosdk.microalgosToAlgos(
-                account.details.amount - account.reservedAlgos
-              )
-            } Algos`}
-          </Typography>
-          <Typography variant="reserved" sx={{ marginTop: 3 }}>
-            Reserved:{" "}
-            {`${algosdk.microalgosToAlgos(account.reservedAlgos)} Algos`}
-          </Typography>
+          <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
+            { balanceForm() }
+            { account.details.governance_ && governanceForm() }
+          </Stack>
+          <Divider sx={{marginBottom: 0}} flexItem></Divider>
           <Grid container spacing={1} sx={{ justifyContent: "center" }}>
             <Grid item xs={5} md={3}>
               <CreatedAppList

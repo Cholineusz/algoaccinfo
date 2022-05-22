@@ -1,5 +1,6 @@
 import * as React from "react";
 import algosdk from "algosdk";
+import axios from "axios";
 import COSTS from "../utils/costs.js";
 import { IndexerContext } from "./IndexerContext";
 import { AlgodContext } from "./AlgodContext.jsx";
@@ -25,20 +26,52 @@ const AccountContextProvider = ({ children }) => {
 
   const fetchAccount = async () => {
     setDetails(null);
-    return new Promise((resolve, reject) => {
-      indexer.client
+    return new Promise(async (resolve, reject) => {
+      const account = await indexer.client
         .lookupAccountByID(address)
         .do()
         .then((reply) => {
           if (reply) {
-            setDetails(reply.account);
-            resolve(reply.account);
+            return reply.account;
           } else {
-            setDetails(null);
-            resolve(null);
+            return null;
           }
         })
-        .catch(() => reject());
+        .catch(() => null);
+
+      if (!account) {
+        setDetails(null);
+        reject(null);
+        return;
+      }
+
+      //Bypass https://governance.algorand.foundation wrongly configured CORS:
+      const governanceURL = `${process.env.REACT_APP_GOVERNANCE_API}/api/governors/${address}/status/`;
+      const headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      };
+      const governance = await fetch(governanceURL, {
+        method: "GET",
+        mode: "no-cors",
+        headers: headers,
+      })
+        .then(
+          async () =>
+            await fetch(governanceURL, {
+              method: "GET",
+              headers: headers,
+            })
+              .then(async (reply) => await reply.json().catch(() => null))
+              .catch(() => null)
+        )
+        .catch(() => null);
+
+      if (governance) {
+        account.governance_ = governance;
+      }
+      setDetails(account);
+      resolve(account);
     });
   };
 
@@ -63,9 +96,9 @@ const AccountContextProvider = ({ children }) => {
     return [unsignedTxn];
   };
 
-  const optOutAsset = async (assetId, creatorAddress="", amount=0) => {
+  const optOutAsset = async (assetId, creatorAddress = "", amount = 0) => {
     const suggestedParams = await algod.client.getTransactionParams().do();
-    
+
     let transactions = [];
     //Send remaining amount to creator address:
     if (amount > 0 && creatorAddress) {
@@ -77,7 +110,7 @@ const AccountContextProvider = ({ children }) => {
           amount: amount,
           suggestedParams: suggestedParams,
         })
-      )
+      );
     }
     //Opt-out:
     transactions.push(
@@ -132,7 +165,10 @@ const AccountContextProvider = ({ children }) => {
 
         let appsUintCost = 0;
         let appsByteSliceCost = 0;
-        if (details["apps-total-schema"] && (optedInAppsCost > 0 || appsCreatedCost > 0)) {
+        if (
+          details["apps-total-schema"] &&
+          (optedInAppsCost > 0 || appsCreatedCost > 0)
+        ) {
           appsUintCost = details["apps-total-schema"]["num-uint"] * COSTS.UINT;
           appsByteSliceCost =
             details["apps-total-schema"]["num-byte-slice"] * COSTS.BYTE_SLICE;
