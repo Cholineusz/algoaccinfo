@@ -15,29 +15,34 @@ export default function Details(props) {
     if (account.details.amount > account.reservedAlgos > 0) {
       available = account.details.amount - account.reservedAlgos;
     }
-    return <BalanceForm
-      title={ account.details.governance_ ? "(without governance)" : "" }
-      balanceTitle="Balance"
-      balance={account.details.amount}
-      available={available}
-      reserved={account.reservedAlgos}
-    />
-  }
+    return (
+      <BalanceForm
+        title={account.details.governance_ ? "(without governance)" : ""}
+        balanceTitle="Balance"
+        balance={account.details.amount}
+        available={available}
+        reserved={account.reservedAlgos}
+      />
+    );
+  };
 
   const governanceForm = () => {
     const govCommitment = account.details.governance_.committed_algo_amount;
     let available = 0;
     if (account.details.amount > account.reservedAlgos > 0) {
-      available = account.details.amount - account.reservedAlgos - govCommitment;
+      available =
+        account.details.amount - account.reservedAlgos - govCommitment;
     }
-    return <BalanceForm
-      title={ account.details.governance_ ? "(with governance)" : "" }
-      balanceTitle={account.details.governance_.period.title}
-      balance={govCommitment}
-      available={available}
-      reserved={account.reservedAlgos + govCommitment}
-    />
-  }
+    return (
+      <BalanceForm
+        title={account.details.governance_ ? "(with governance)" : ""}
+        balanceTitle={account.details.governance_.period.title}
+        balance={govCommitment}
+        available={available}
+        reserved={account.reservedAlgos + govCommitment}
+      />
+    );
+  };
 
   return (
     <>
@@ -49,11 +54,16 @@ export default function Details(props) {
             flexDirection: "column",
           }}
         >
-          <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
-            { balanceForm() }
-            { account.details.governance_ && governanceForm() }
+          <Stack
+            sx={{ paddingBottom: 3, paddingTop: 2 }}
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+            divider={<Divider orientation="vertical" flexItem />}
+          >
+            {balanceForm()}
+            {account.details.governance_ && governanceForm()}
           </Stack>
-          <Divider sx={{marginBottom: 0}} flexItem></Divider>
+          <Divider flexItem></Divider>
           <Grid container spacing={1} sx={{ justifyContent: "center" }}>
             <Grid item xs={5} md={3}>
               <CreatedAppList

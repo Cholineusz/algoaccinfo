@@ -10,10 +10,9 @@ export default function BalanceForm(props) {
         display: "flex",
         alignItems: "center",
         flexDirection: "column",
-        marginBottom: 2,
       }}
     >
-      <Typography variant="balance" sx={{ marginTop: 2 }}>
+      <Typography variant="balance">
         {`${props.balanceTitle}: ${algosdk.microalgosToAlgos(
           props.balance
         )} Algos`}
