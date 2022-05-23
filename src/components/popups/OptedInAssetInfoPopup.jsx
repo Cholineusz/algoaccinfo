@@ -19,6 +19,7 @@ export default function AssetInfoPopup(props) {
     amount: -1,
     name: "",
     lastUse: null,
+    creator: ""
   });
 
   const showMessage = (text, timed = true) => {
@@ -32,14 +33,31 @@ export default function AssetInfoPopup(props) {
   };
 
   const optOut = async () => {
+    if (props.asset.amount > 0 && !window.confirm(
+      `You still have ${details.amount} ${details.name}.\
+      \n\nThe remaining amount will be sent to ${details.name} creator address.\
+      \n\nDo you agree?`)
+    ) {
+      return;
+    }
+
     setLoading(true);
 
-    const unsignedTxn = await account.optOutAsset(props.asset["asset-id"]);
+    const unsignedTxns = await account.optOutAsset(
+      props.asset["asset-id"], 
+      details.creator,
+      props.asset.amount
+    );
 
-    const signedTxn = await wallet.signTransaction(unsignedTxn);
+    const signedTxns = await wallet.signTransactions(unsignedTxns);
+    if (!signedTxns) {
+      setLoading(false);
+      showMessage("Transaction rejected, please try again");
+      return;
+    }
 
     algod
-      .sendTransaction(signedTxn)
+      .sendTransaction(signedTxns)
       .then(() => {
         account.fetchAccount().then(() => {
           props.onShowMessage(
@@ -83,26 +101,23 @@ export default function AssetInfoPopup(props) {
         const calculated = parseFloat(
           (props.asset.amount / 10 ** decimals).toFixed(decimals)
         );
-        return { amount: calculated, name: assetInfo.asset.params.name };
+        return { 
+          amount: calculated, 
+          name: assetInfo.asset.params.name,
+          creator: assetInfo.asset.params.creator,
+        };
       }
-      return { amount: -1, name: "" };
+      return { amount: -1, name: "", creator: "" };
     };
 
     const fetchData = async () => {
       const lastUse = await getLastUse();
-      const { amount, name } = await getDetails();
+      const { amount, name, creator } = await getDetails();
 
-      setDetails({ amount, name, lastUse });
+      setDetails({ amount, name, lastUse, creator });
     };
 
     fetchData();
-
-    if (props.asset.amount > 0) {
-      showMessage(
-        "You can't opt out of the asset if you have non-zero amount",
-        false
-      );
-    }
   }, []);
 
   const content = () => {

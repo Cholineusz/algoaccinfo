@@ -25,13 +25,14 @@ export default function AssetList(props) {
             assetIndex < account.details["assets"].length;
             assetIndex++
           ) {
-            const ownedAsset = account.details["assets"][index];
+            const ownedAsset = account.details["assets"][assetIndex];
             if (ownedAsset["asset-id"] === created["index"]) {
               asset = ownedAsset;
               break;
             }
           }
         }
+        
         const cost = algosdk.microalgosToAlgos(COSTS.OPT_IN);
         const resource = { asset, cost, created };
         assets.push(

@@ -1,7 +1,7 @@
 import * as React from "react";
 import logo from "./algorand_logo.svg";
 import "./App.css";
-import AccountForm from "./components/AccountForm";
+import AccountForm from "./components/forms/AccountForm";
 import AccountDetails from "./components/AccountDetails";
 import { Container, Box, Typography } from "@mui/material";
 import { WalletContextProvider } from "./contexts/WalletContext";
@@ -59,6 +59,7 @@ function App() {
                       <a
                         href="https://github.com/HashingSlash/AlgoRolo"
                         target="_blank"
+                        rel="noreferrer"
                       >
                         Apps info provided by AlgoRolo
                       </a>

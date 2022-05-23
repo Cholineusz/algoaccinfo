@@ -12,6 +12,9 @@ const theme = createTheme({
     error: {
       main: "#E94B3C",
     },
+    warning: {
+      main: "#D68E00"
+    }
   },
   typography: {
     balance: {
@@ -28,6 +31,16 @@ const theme = createTheme({
       fontSize: 20,
       fontWeight: 600,
       color: "#E94B3C",
+    },
+    governance: {
+      fontSize: 25,
+      fontWeight: 600,
+      color: "#FF9A1B"
+    },
+    warning: {
+      fontSize: 16,
+      fontWeight: 600,
+      color: "#D68E00"
     },
     version: {
       fontSize: 16,
