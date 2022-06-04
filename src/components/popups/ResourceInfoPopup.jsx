@@ -7,6 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { WalletContext } from "../../contexts/WalletContext";
 import Message from "../alerts/Message";
+import ASAAvatar from "../ASAAvatar";
 
 export default function ResourceInfoPopup(props) {
   const wallet = React.useContext(WalletContext);
@@ -23,6 +24,13 @@ export default function ResourceInfoPopup(props) {
         <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
         <DialogContent>
           <Stack spacing={1}>
+            {props.asset && (
+              <ASAAvatar
+                sx={{ alignSelf: "center" }}
+                name={props.primary}
+                assetId={props.asset["asset-id"]}
+              ></ASAAvatar>
+            )}
             {props.content}
             {props.message && (
               <Message
