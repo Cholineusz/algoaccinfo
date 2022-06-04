@@ -162,6 +162,7 @@ export default function AppInfoPopup(props) {
       content={content()}
       message={message}
       timed={true}
+      app={details}
       open={props.open}
       onClearMessage={clearMessage}
       handleAction={optOut}
