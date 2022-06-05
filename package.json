@@ -1,6 +1,6 @@
 {
-  "name": "algo-info",
-  "version": "1.0.4",
+  "name": "algoaccinfo",
+  "version": "1.0.5",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.8.2",

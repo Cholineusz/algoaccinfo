@@ -109,6 +109,7 @@ export default function AppInfoPopup(props) {
       content={content()}
       message={message}
       timed={true}
+      app={props.app}
       open={props.open}
       onClearMessage={clearMessage}
       handleAction={destroy}

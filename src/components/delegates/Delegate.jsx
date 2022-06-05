@@ -4,8 +4,11 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  ListItemAvatar,
   IconButton,
 } from "@mui/material";
+import ASAAvatar from "../avatars/ASAAvatar";
+import AppAvatar from "../avatars/AppAvatar";
 
 export default function Delegate(props) {
   return (
@@ -36,6 +39,15 @@ export default function Delegate(props) {
         }}
         onClick={props.handleClick}
       >
+        <ListItemAvatar>
+          {props.asset && (
+            <ASAAvatar
+              name={props.primary}
+              assetId={props.asset["asset-id"]}
+            ></ASAAvatar>
+          )}
+          {props.app && <AppAvatar owner={props.owner}></AppAvatar>}
+        </ListItemAvatar>
         <ListItemText primary={props.primary} secondary={props.secondary} />
       </ListItemButton>
     </ListItem>

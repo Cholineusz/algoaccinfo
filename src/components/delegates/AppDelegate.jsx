@@ -4,6 +4,7 @@ import Delegate from "./Delegate";
 
 export default function AppDelegate(props) {
   const [name, setName] = React.useState(props.primary);
+  const [owner, setOwner] = React.useState();
 
   React.useEffect(() => {
     axios
@@ -12,9 +13,10 @@ export default function AppDelegate(props) {
       )
       .then((appInfo) => {
         if (appInfo.data && appInfo.data.length > 0) {
+          setOwner(appInfo.data[0].name.toLowerCase());
           setName(`${appInfo.data[0].name} - ${appInfo.data[0].description}`);
         }
       });
   }, []);
-  return <Delegate {...props} primary={name} />;
+  return <Delegate {...props} primary={name} owner={owner}/>;
 }

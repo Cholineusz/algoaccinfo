@@ -169,6 +169,7 @@ export default function AssetInfoPopup(props) {
       content={content()}
       message={message}
       timed={timed}
+      asset={props.asset}
       open={props.open}
       onClearMessage={clearMessage}
       handleAction={destroy}
