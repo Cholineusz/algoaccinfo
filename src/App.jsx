@@ -64,6 +64,15 @@ function App() {
                         Apps info provided by AlgoRolo
                       </a>
                     </Typography>
+                    <Typography variant="version">
+                      <a
+                        href="https://asa-list.tinyman.org/"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        ASA icons provided by asa-list.tinyman.org
+                      </a>
+                    </Typography>
                   </Box>
                 </Container>
               </Theme>
